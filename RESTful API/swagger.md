@@ -1,29 +1,76 @@
 # restful api设计之swagger
 
+## 摘要
+Swagger 是一个规范和完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。
+
+## 快速入门
+
+```dash
+# swagger版本号
 swagger: "2.0"
+
+# 接口文档的基本描述
 info:
+  # 文档的标题
   title: 品牌到家联盟-周期购API
+
+  # 文档的基本描述
   description: 该接口文档用于周期购前后端开发数据约定，无特别说明，都是用该文档标准.
+
+  # 文档的版本
   version: 1.0.0
+
+# API根
 host: www.baidu.com
+
+# 设置传输协议
 schemes:
   - HTTP
   - HTTPS
+
+# 设置HTTP的MIME类型
 produces:
   - application/json
+
+# 所有API从这里开始配置
 paths:
+  
+  # API的路径
   /merchants/coupons/6:
+
+    # 请求方式
     get:
+
+      # 简要描述，在swagger-ui 这种工具中显示在折叠菜单的标题栏上
       summary: 该接口用于获取商户发放的优惠券
+
+      # 当前接口更详细的描述
       description: 该接口是以前存在的现有的接口，在周期购功能中，用于修正接口数据规范，name字段长度不超过8个字符。
+
+      # 要发送的参数列表
       parameters:
-        - name: user_id
-          in: query
-          description: 用户ID
-          type: number
-          required: true
-          format: number
-          default: 212501
+
+        # 参数的格式以 - 开始
+          # 参数名
+        - name: user_id 
+          
+          # 必须的参数，用来说明在这个接口中用来干嘛的，常用的取值有： "query", "header", "path", "formData", "body"
+          in: query 
+          
+          # 字段描述
+          description: 用户ID 
+          
+          # 数据类型 常用的有 "string", "number", "integer", "boolean", "array" or "file"
+          type: number 
+          
+          # 是否必须
+          required: true 
+          
+          # 在swagger-ui 这种工具中用来校验类型
+          format: number 
+          
+          # 默认值
+          default: 212501 
 
         - name: count
           in: query
@@ -32,11 +79,20 @@ paths:
           required: false
           format: number
           default: 2
+      # 打一个标记
       tags:
         - 老接口
+
+      # 响应内容
       responses:
+        
+        # HTTP状态码
         "200":
-          description: 请求成功
+
+          # 响应描述
+          description: 
+
+          # 响应例子
           examples:
             {
               "code":200,
@@ -62,6 +118,7 @@ paths:
                 "start_time": "2015-12-07"
               }]
             }
+        # 默认响应
         default:
           description: "结果值"
 
@@ -110,7 +167,7 @@ paths:
               "result":[{
                   # 未设置配送周期
                   "id":1,
-                  "url":"http://wxtest.kuaijiankang.cn/aaa.jpg",
+                  "url":"http://www.baidu.com/aaa.jpg",
                   "name":"商品的名字",
                   "count":154,
                   "type":1,
@@ -122,7 +179,7 @@ paths:
                 {
                   # 剩余张数为0
                   "id":2,
-                  "url":"http://wxtest.kuaijiankang.cn/aaa.jpg",
+                  "url":"http://www.baidu.com/aaa.jpg",
                   "name":"商品的名字",
                   "count":0,
                   "type":2,
@@ -134,7 +191,7 @@ paths:
                 {
                   # 已经设置了配送周期
                   "id":3,
-                  "url":"http://wxtest.kuaijiankang.cn/aaa.jpg",
+                  "url":"http://www.baidu.com/aaa.jpg",
                   "name":"商品的名字",
                   "count":24,
                   "type":3,
@@ -144,552 +201,10 @@ paths:
                   "set_time":""
                 }]
             }
-  /goods:
-    get:
-      summary: 获取用户购买的周期够的单品
-      description: 该接口用于获取用户购买的周期够的单品，在周期购功能中，增加商品类型用来判断商品是否为周期购商品。
-      parameters:
-        - name: user_id
-          in: query
-          description: 用户ID
-          type: number
-          required: true
-          format: number
-          default: 212501
+```
 
-        - name: goods_id
-          in: query
-          description: 商品ID
-          type: number
-          required: true
-          format: number
-          default: 127
-      tags:
-        - 老接口
-      responses:
-        "200":
-          description: 请求成功
-          examples:
-            {
-              "code":200,
-              "result":{
-                  "Goods":{
-                      "goods_type":"cycle"
-                  }
-              }
-            }
+## 特别说明
+在前后端分离模式下开发的时候，接口文档对开发人员非常重要！！！说小点就是关系到项目进度的事情，说大了就是关系到出问题时候扯皮的事情，所以业内很多同行都强烈建议保证接口文档的完整性。所以在日常开发中，在定义接口文档的时候，前端，测试，开发，三者都应该非常了解接口文档。
 
-  /cycles/total_status:
-    get:
-      summary: 获取用户我的电子券信息
-      description: 周期购需求中，需要在该接口中返回我的电子券信息
-      parameters:
-        - name: user_id
-          in: query
-          description: 用户ID
-          type: number
-          required: true
-          format: number
-          default: 212501
-      tags:
-        - 新接口
-      responses:
-        "200":
-          description: 请求成功
-          examples:
-            {
-              "result":{
-                "count":0,              # 电子券数量
-                "cycle_delivery":0      # 周期购的今日配送
-              },
-              "code":200
-            }
-
-  /cycles/goods_list:
-    get:
-      summary: 该接口用于获取周期购商品列表信息
-      description: 该接口用于获取周期购商品列表信息
-      parameters:
-        - name: home_show
-          in: query
-          description: 是否在首页展示，0不展示，1展示
-          type: number
-          default: 0
-          required: true
-          format: number
-
-        - name: page
-          in: query
-          description: 页码
-          type: number
-          default: 1
-          required: false
-          format: number
-
-        - name: count
-          in: query
-          description: "每次请求多少条信息"
-          type: number
-          required: false
-          default: 50
-          format: number
-      tags:
-        - 新接口
-      responses:
-        "200":
-          description: 请求成功
-          examples:
-            {
-              "code":200,
-              "result":[{
-                "id":126,
-                "src": "http://stage.ams.kuaijiankang.cn/data/merchants/02800011/products/10001/p1.jpg",
-                "full_name": "【一元抢相因】真酸奶 200g*1",
-                "market_price": 500,
-                "shop_price": 0,
-                "shop_type": 1,
-                "spec": "盒",
-                "status": 1,
-                "tags":"单个商品的tag描述"
-              },{
-                "id":126,
-                "src": "http://stage.ams.kuaijiankang.cn/data/merchants/02800011/products/10001/p1.jpg",
-                "full_name": "【一元抢相因】真酸奶 200g*1",
-                "market_price": 500,
-                "shop_price": 0,
-                "shop_type": 1,
-                "spec": "盒",
-                "status": 1,
-                "tags":"单个商品的tag描述"
-              }],
-              "message":"这个字段必须返回，用来在周期购页面顶部显示特别说明。"
-            }
-
-  /cycles/orders:
-    post:
-      summary: 该接口用于用户直接购买周期购商品
-      description: 周期购中，前端需要单独传递类型给后端，后端在生成订单的时候需要标识订单类型，以方便前端在订单成功页面判断订单类型。
-      parameters:
-        - name: Auth-Token
-          in: query
-          description: 用户Token信息
-          type: string
-          required: true
-          format: string
-
-        - name: address_id
-          in: query
-          description: 用户地址ID
-          type: number
-          required: true
-          format: string
-
-        - name: goodsinfo
-          in: query
-          description: 购买的商品信息
-          type: string
-          required: true
-          format: string
-          enum:
-            - 126|1,127|2
-
-        - name: m_id
-          in: query
-          description: 商户的ID
-          type: number
-          required: true
-          format: string
-          enum:
-            - 26
-
-        - name: pay_type
-          in: query
-          description: 支付类型
-          type: number
-          required: true
-          format: number
-          enum:
-            - 8
-
-        - name: user_id
-          in: query
-          description: 用户ID
-          type: number
-          required: true
-          format: number
-          default: 212501
-
-        - name: order_type
-          in: query
-          description: 订单类型，这里标记这个订单为周期购的订单
-          type: string
-          required: true
-          format: string
-          default: cycle
-      tags:
-        - 新接口
-      responses:
-        "200":
-          description: 请求成功
-          examples:
-            {
-              "code":200,
-              "result":{
-                  "amount":10000,
-                  "sn":342423423432,
-                  "id": 28, # 商户ID
-                  "goodsinfo":"126|1"   # 需要单独确认一下
-              },
-              "message":"成功"
-            }
-
-  /cycles/setting:
-    post:
-      summary: 该接口用于设置用户设定的周期购的配送周期
-      description: 该接口用于设置用户设定的周期购的配送周期.
-      parameters:
-        - name: Auth-Token
-          in: query
-          description: 用户Token信息
-          type: string
-          required: true
-          format: string
-          enum:
-            - "b7162a3c3258616d"
-
-        - name: user_id
-          in: query
-          description: 用户身份ID
-          type: number
-          required: true
-          format: number
-          default: 212501
-
-        - name: type
-          in: query
-          description: 配送时间类型
-          type: string
-          required: true
-          default: everyday
-          enum:
-              everyday -> 每天配送
-              interval -> 隔天配送
-              week -> 按礼拜选择
-        - name: custom
-          in: query
-          description: 配送时间结果值
-          type: string
-          required: true
-          enum:
-              everyday -> ""
-              interval -> "2" 隔2天配送
-              week -> "1,3,5" 每周1，3，5配送
-      tags:
-        - 新接口
-      responses:
-        "200":
-          description: 请求成功
-          examples:
-            {
-              "code":200,
-              "message":"设置配送周期成功！"
-            }
-    get:
-      summary: 该接口用于获取用户设定的周期购的配送周期
-      description: 该接口用于获取用户设定的周期购的配送周期.
-      parameters:
-        - name: user_id
-          in: query
-          description: 用户身份ID
-          type: number
-          required: true
-          format: number
-          default: 212501
-        - name: id
-          in: query
-          description: 周期购ID
-          type: number
-          required: false
-          format: number
-      tags:
-        - 新接口
-      responses:
-        "200":
-          description: 请求成功
-          examples:
-            {
-              "code":200,
-              "result":{
-                  "type":"week",      # 配送时间类型
-                  "custom":"1,3,5"    # 配送时间结果值
-              }
-            }
-
-  /cycles/calendar:
-    get:
-      summary: 该接口用于获取周期购中日历页面的相关信息
-      description: 该接口用于获取周期购中日历页面的相关信息.
-      parameters:
-        - name: date
-          in: query
-          description: 传递[年份+月份]给后端,方便后端根据值来定位月份中的周期
-          type: date
-          required: true
-          enum:
-              - 2015-12
-      tags:
-        - 新接口
-      responses:
-        "200":
-          description: 请求成功
-          examples:
-            {
-              "code":200,
-              "result":[
-                {
-                  "status":0,   # 0表示已经配送过了的单子
-                  "day":3       # 返回的月份中，定位到3号这一天
-                },
-                {
-                  "status":0,
-                  "day":10
-                },
-                {
-                  "status":1,   # 1表示还没配送过的单子
-                  "day":14      # 返回的月份中，定位到14号这一天
-                },
-                {
-                  "status":1,
-                  "day":18
-                }
-              ]
-            }
-
-  /cycles/take_goods:
-    get:
-      summary: 该接口用于获取周期购中日历页面指定某一天的配送商品
-      description: 该接口用于获取周期购中日历页面指定某一天的配送商品.
-      parameters:
-        - name: user_id
-          in: query
-          description: 用户身份ID
-          type: number
-          required: true
-          format: number
-          default: 212501
-
-        - name: date
-          in: query
-          description: 传递年份给后端方便后端根据年份来定位月份中的周期
-          type: date
-          required: true
-          format: date
-          enum:
-            - 2015-12-18
-      tags:
-        - 新接口
-      responses:
-        "200":
-          description: 请求成功
-          examples:
-            {
-              "code":200,
-              "result":{
-                  "best_time":"19:00 ~ 21:00",
-                  ”items”:[{
-                    "id":127,
-                    "full_name":"真酸奶 200g*8盒/箱",
-                    "market_price": 4000,
-                    "shop_price":1000,
-                    "number":1,
-                    "cover": "http://stage.ams.kuaijiankang.cn/data/merchants/02800011/products/10002/p2.jpg",
-                    "category_name":"鲜奶到家",
-                    "amount":1000
-                  }]
-              }
-            }
-
-  /cycles/take_goods_del:
-    post:
-      summary: 该接口用于删除周期购中日历页面指定某一天的配送商品
-      description: 该接口用于删除周期购中日历页面指定某一天的配送商品.
-      parameters:
-        - name: Auth-Token
-          in: query
-          description: 用户Token信息
-          type: string
-          required: true
-          format: string
-          enum:
-            - "b7162a3c3258616d"
-
-        - name: user_id
-          in: query
-          description: 用户身份ID
-          type: number
-          required: true
-          format: number
-          default: 212501
-
-        - name: date
-          in: query
-          description: 传递年份给后端方便后端根据年份来定位月份中的周期。注意，如果取消周期购，那这个字段将不传
-          type: date
-          required: false
-          format: date
-          enum:
-              - 2015-12-18
-
-        - name: cycle_id
-          in: query
-          description: 商品ID
-          type: number
-          required: true
-          format: number
-          enum:
-            - 2
-        - name: m_id
-          in: query
-          description: 商户ID
-          type: number
-          required: true
-          format: number
-          enum:
-            - 26
-      tags:
-        - 新接口
-      responses:
-        "200":
-          description: 请求成功
-          examples:
-            {
-              "code":200,
-              "message":"删除成功"
-            }
-
-  /cycles/take_goods_update:
-    post:
-      summary: 该接口用于调整周期购中日历页面指定某一天的配送商品的数量
-      description: 该接口用于调整周期购中日历页面指定某一天的配送商品的数量.
-      parameters:
-        - name: Auth-Token
-          in: query
-          description: 用户Token信息
-          type: string
-          required: true
-          format: string
-          enum:
-            - "b7162a3c3258616d"
-
-        - name: user_id
-          in: query
-          description: 用户身份ID
-          type: number
-          required: true
-          format: number
-          default: 212501
-
-        - name: date
-          in: query
-          description: 传递年份给后端方便后端根据年份来定位月份中的周期
-          type: date
-          required: true
-          format: date
-          enum:
-              - 2015-12-18
-
-        - name: cycle_id
-          description: 商品信息列表
-          type: array
-          required: true
-          format: array
-          enum:
-            [{
-              "id":187,
-              "number":2
-            },
-            {
-              "id":126,
-              "number":4
-            }]
-      tags:
-        - 新接口
-      responses:
-        "200":
-          description: 请求成功
-          examples:
-            {
-              "code":200,
-              "message":"修改商品数量成功"
-            }
-
-  /merchants:
-    get:
-      summary: 该接口用于获取是否开启周期购功能
-      description: 该接口是以前存在的现有的接口，周期购需求中，需要在该接口中增加一个状态字段表示周期购是否开启
-      parameters:
-        - name: user_id
-          in: query
-          description: 用户身份ID
-          type: number
-          required: true
-          format: number
-          default: 212501
-
-        - name: short_url
-          description: 商户名
-          type: string
-          required: true
-          default: jule
-          enum:
-              - jule
-      tags:
-        - 老接口
-      responses:
-        "200":
-          description: 请求成功
-          examples:
-            {
-              code:200,
-              result:{
-                items:[{
-                  is_allow_cycles:0 # 0表示没开启；1表示开启周期购功能
-                }]
-              }
-            }
-/orders:
-  get:
-    summary: 在订单列表页面，后端需要返回周期购订单状态
-    description: 该接口是以前存在的接口，在订单列表页面，后端需要返回周期购订单状态
-    parameters:
-      - name: user_id
-        in: query
-        description: 用户身份ID
-        type: number
-        required: true
-        format: number
-        default: 212501
-
-      - name: limit
-        in: query
-        description: 获取多少条
-        type: number
-        required: false
-        format: number
-        enum:
-          - 12
-    tags:
-      - 老接口
-    responses:
-      "200":
-        description: 请求成功
-        examples:
-          {
-            "code":200,
-            "result":{
-              "items":[{
-                order_type:cycle
-              }],
-              "total":1
-            }
-          }
+## 快速生成接口文档
+首先把编写好的接口文档命名为**xxx.yaml**然后放到自己的项目中,我是放到项目根目录下的api文件夹中，如果您使用的IDE可以检测YAML基本语法当然更好，不过只能作为参考，具体校验方法还的用官方的(ps:被其他校验工具坑哭过)。官方的校验工具最直观的是这个[官方在线编辑器](http://editor.swagger.io/ "点这里")可以把刚刚编写的接口文档粘贴到左边区域，然后就能实时校验了，编写完毕之后，点击**Generate Server**或者**Generate Client**来下载相应语言或者相应版本的代码。当然也可以点击File>Download JSON把编辑的文档下载下来，然后使用github上[官方的UI](https://github.com/swagger-api/swagger-ui "点这里")在自己测试服务器上部署，部署成功之后上传刚刚下载的swagger.json文件到项目的dist下面替换掉swagger.json文件，然后修改dist目录下index.html中38行的请求文件路径为自己刚刚上传的swagger.json文件即可，为了访问的方便，最好给文档配置一个域名，把路径指向到dist下面就可以了。
