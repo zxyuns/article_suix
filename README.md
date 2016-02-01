@@ -18,3 +18,7 @@
 # RESTful API
 
 ### [restful api设计之swagger](RESTful API/swagger.md "restful api设计之swagger")
+
+# 解决方案
+
+### [前端代码异常监控解决方案](https://github.com/Heqingsong/error-monitor "前端代码异常监控解决方案");
